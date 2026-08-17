@@ -1,0 +1,583 @@
+# =============================================================================
+# field_map.yml — G-ASET PDF form-field mapping (SME-editable)
+# =============================================================================
+# HOW TO USE:
+#   * Replace every "REPLACE__..." value with the actual AcroForm field name
+#     from your PDF version (use the app's Field Inspector to discover names).
+#   * DO NOT change the option keys (left side of "key: field"). The scoring
+#     engine matches on these keys (esp. items 6, 11, 14, 32).
+#   * For checkboxes, the app treats /Yes, /On, /1, X, /Checked as "checked".
+#   * If a translated PDF edition has different field names, keep one copy of
+#     this file per edition (e.g., field_map_es.yml) and point the app at it,
+#     or merge names if the publisher kept them identical across translations.
+#
+# SCORING REMINDERS (from CDC rubric, for orientation only — logic lives in
+# scoring.py):
+#   ypn        -> Yes=5 / Partially=2.5 / No=0
+#   multi      -> count-based thresholds per item (noted in comments)
+#   composite  -> items 6A, 11, 14: ID physician + any pharmacist + micro = 5
+#   required   -> item 32: first_line+dose+duration+alternatives = 5
+#   yescount   -> item 35A: >=9 yes = 5; 1-8 = 2.5; 0 = 0
+# =============================================================================
+
+policies:
+  na_conflict: count_selections   # or: na_wins  (SME decision)
+
+meta:
+  facility_field: "REPLACE__FacilityName"
+  beds_field:     "REPLACE__LicensedBeds"
+  date_fields:                     # ALL "Date of Completion" fields; latest wins
+    - "REPLACE__DateOfCompletion_Row1"
+    - "REPLACE__DateOfCompletion_Row2"
+    - "REPLACE__DateOfCompletion_Row3"
+    - "REPLACE__DateOfCompletion_Row4"
+    - "REPLACE__DateOfCompletion_Row5"
+
+items:
+
+  # ===========================================================================
+  # DOMAIN 1 — Leadership Commitment & Accountability (items 1–12, max 60)
+  # ===========================================================================
+
+  "1":   # Stewardship identified as a priority by leadership?
+    type: ypn
+    yes:     "REPLACE__Q1_Yes"
+    partial: "REPLACE__Q1_Partial"
+    no:      "REPLACE__Q1_No"
+
+  "2":   # Stewardship in annual plans with KPIs?
+    type: ypn
+    yes:     "REPLACE__Q2_Yes"
+    partial: "REPLACE__Q2_Partial"
+    no:      "REPLACE__Q2_No"
+
+  "3":   # Stewardship committee exists?
+    type: ypn
+    yes:     "REPLACE__Q3_Yes"
+    partial: "REPLACE__Q3_Partial"
+    no:      "REPLACE__Q3_No"
+
+  "4":   # Committee membership. Scoring: >=8 selected = 5; 1-7 = 2.5; none/NA = 0
+    type: multi
+    options:
+      ipc_physician:       "REPLACE__Q4_IPCPhysician"
+      ipc_nurse:           "REPLACE__Q4_IPCNurse"
+      non_ipc_nurse:       "REPLACE__Q4_NonIPCNurse"
+      id_physician:        "REPLACE__Q4_IDPhysician"
+      icu_physician:       "REPLACE__Q4_ICUPhysician"
+      surgeon:             "REPLACE__Q4_Surgeon"
+      general_medicine:    "REPLACE__Q4_GenMedPhysician"
+      other_physician:     "REPLACE__Q4_OtherPhysician"
+      id_pharmacist:       "REPLACE__Q4_IDPharmacist"
+      clinical_pharmacist: "REPLACE__Q4_OtherClinPharmacist"
+      staff_pharmacist:    "REPLACE__Q4_OtherStaffPharmacist"
+      senior_leader:       "REPLACE__Q4_SeniorLeader"
+      microbiologist:      "REPLACE__Q4_ClinMicrobiologist"
+      it_specialist:       "REPLACE__Q4_ITSpecialist"
+      not_applicable:      "REPLACE__Q4_NotApplicable"
+      other:               "REPLACE__Q4_Other"
+
+  "5":   # Committee meets at least quarterly?
+    type: ypn
+    yes:     "REPLACE__Q5_Yes"
+    partial: "REPLACE__Q5_Partial"
+    no:      "REPLACE__Q5_No"
+
+  "6":   # Team composition (score 6A only). Composite: id_physician AND any
+         # pharmacist (if present at HCF) AND microbiologist (if present) = 5;
+         # anything else selected = 2.5; none/NA = 0.
+    type: multi
+    options:
+      not_applicable:      "REPLACE__Q6A_NotApplicable"
+      id_physician:        "REPLACE__Q6A_IDPhysician"
+      other_physician:     "REPLACE__Q6A_OtherPhysician"
+      id_pharmacist:       "REPLACE__Q6A_IDPharmacist"
+      clinical_pharmacist: "REPLACE__Q6A_OtherClinPharmacist"
+      staff_pharmacist:    "REPLACE__Q6A_OtherStaffPharmacist"
+      ipc_physician:       "REPLACE__Q6A_IPCPhysician"
+      ipc_nurse:           "REPLACE__Q6A_IPCNurse"
+      non_ipc_nurse:       "REPLACE__Q6A_NonIPCNurse"
+      microbiologist:      "REPLACE__Q6A_ClinMicrobiologist"
+      it_specialist:       "REPLACE__Q6A_ITSpecialist"
+      admin_support:       "REPLACE__Q6A_AdminSupport"
+      other:               "REPLACE__Q6A_Other"
+    # NOTE: 6B–6E (counts, leader, %time, compensation) are NOT scored per the
+    # rubric. If you want them captured for reporting, list them here and the
+    # app will surface them in the Field Inspector; they do not affect points.
+
+  "7":   # Team meets regularly?
+    type: ypn
+    yes:     "REPLACE__Q7_Yes"
+    partial: "REPLACE__Q7_Partial"
+    no:      "REPLACE__Q7_No"
+
+  "8":   # Authority over antibiotic-use policies?
+    type: ypn
+    yes:     "REPLACE__Q8_Yes"
+    partial: "REPLACE__Q8_Partial"
+    no:      "REPLACE__Q8_No"
+
+  "9":   # Collaborating departments. Scoring: >=2 = 5; 1 = 2.5; none/NA = 0
+    type: multi
+    options:
+      ipc:                       "REPLACE__Q9_IPC"
+      infectious_diseases:       "REPLACE__Q9_ID"
+      patient_safety:            "REPLACE__Q9_PatientSafety"
+      quality:                   "REPLACE__Q9_Quality"
+      pharmacy:                  "REPLACE__Q9_Pharmacy"
+      microbiology:              "REPLACE__Q9_Microbiology"
+      drug_therapeutics:         "REPLACE__Q9_DrugTherapeuticsCommittee"
+      hiv_tb:                    "REPLACE__Q9_HIVTB"
+      surgery_operating_theater: "REPLACE__Q9_Surgery"
+      not_applicable:            "REPLACE__Q9_NotApplicable"
+      other:                     "REPLACE__Q9_Other"
+
+  "10":  # External networks participation?
+    type: ypn
+    yes:     "REPLACE__Q10_Yes"
+    partial: "REPLACE__Q10_Partial"
+    no:      "REPLACE__Q10_No"
+
+  "11":  # Formulary/procurement decision-makers. Composite rule (same as 6A).
+    type: multi
+    options:
+      id_physician:            "REPLACE__Q11_IDPhysician"
+      id_pharmacist:           "REPLACE__Q11_IDPharmacist"
+      clinical_pharmacist:     "REPLACE__Q11_OtherClinPharmacist"
+      staff_pharmacist:        "REPLACE__Q11_OtherStaffPharmacist"
+      stewardship_team_member: "REPLACE__Q11_ASTeamMember"
+      microbiologist:          "REPLACE__Q11_ClinMicrobiologist"
+      not_applicable:          "REPLACE__Q11_NotApplicable"
+      other:                   "REPLACE__Q11_Other"
+
+  "12":  # Evidence review before formulary addition?
+    type: ypn
+    yes:     "REPLACE__Q12_Yes"
+    partial: "REPLACE__Q12_Partial"
+    no:      "REPLACE__Q12_No"
+
+  # ===========================================================================
+  # DOMAIN 2 — Resources (items 13–25, max 65)
+  # ===========================================================================
+
+  "13":  # Human & financial resources allocated?
+    type: ypn
+    yes:     "REPLACE__Q13_Yes"
+    partial: "REPLACE__Q13_Partial"
+    no:      "REPLACE__Q13_No"
+
+  "14":  # Personnel physically present at HCF. Composite rule. ALSO drives the
+         # "if present at HCF" conditionals used when scoring items 6 and 11.
+    type: multi
+    options:
+      id_physician:        "REPLACE__Q14_IDPhysician"
+      id_pharmacist:       "REPLACE__Q14_IDPharmacist"
+      clinical_pharmacist: "REPLACE__Q14_OtherClinPharmacist"
+      staff_pharmacist:    "REPLACE__Q14_OtherStaffPharmacist"
+      microbiologist:      "REPLACE__Q14_ClinMicrobiologist"
+      not_applicable:      "REPLACE__Q14_NotApplicable"
+      other:               "REPLACE__Q14_Other"
+
+  "15":  # Office/physical space?
+    type: ypn
+    yes:     "REPLACE__Q15_Yes"
+    partial: "REPLACE__Q15_Partial"
+    no:      "REPLACE__Q15_No"
+
+  "16":  # Basic equipment (phone, computer)?
+    type: ypn
+    yes:     "REPLACE__Q16_Yes"
+    partial: "REPLACE__Q16_Partial"
+    no:      "REPLACE__Q16_No"
+
+  "17":  # Information/decision-support systems?
+    type: ypn
+    yes:     "REPLACE__Q17_Yes"
+    partial: "REPLACE__Q17_Partial"
+    no:      "REPLACE__Q17_No"
+
+  "18":  # Team data access. Scoring: >=2 = 5; 1 = 2.5; none/NA = 0
+    type: multi
+    options:
+      emr:                   "REPLACE__Q18_EMR"
+      antibiotics_purchased: "REPLACE__Q18_PurchasedList"
+      antibiotics_dispensed: "REPLACE__Q18_DispensedList"
+      administration_records: "REPLACE__Q18_AdminRecords"
+      syndromic_antibiogram: "REPLACE__Q18_SyndromicAntibiogram"
+      cumulative_antibiogram: "REPLACE__Q18_CumulativeAntibiogram"
+      not_applicable:        "REPLACE__Q18_NotApplicable"
+
+  "19":  # Electronic data availability. Scoring: >=2 = 5; 1 = 2.5; none/NA = 0
+    type: multi
+    options:
+      consumption:    "REPLACE__Q19_Consumption"
+      use:            "REPLACE__Q19_Use"
+      resistance:     "REPLACE__Q19_Resistance"
+      cost:           "REPLACE__Q19_Cost"
+      administrative: "REPLACE__Q19_AdministrativeData"
+      not_applicable: "REPLACE__Q19_NotApplicable"
+      other:          "REPLACE__Q19_Other"
+
+  "20":  # Access to peer-reviewed literature?
+    type: ypn
+    yes:     "REPLACE__Q20_Yes"
+    partial: "REPLACE__Q20_Partial"
+    no:      "REPLACE__Q20_No"
+
+  "21":  # Lab & imaging services access?
+    type: ypn
+    yes:     "REPLACE__Q21_Yes"
+    partial: "REPLACE__Q21_Partial"
+    no:      "REPLACE__Q21_No"
+
+  "22":  # Micro lab open 24h?
+    type: ypn
+    yes:     "REPLACE__Q22_Yes"
+    partial: "REPLACE__Q22_Partial"
+    no:      "REPLACE__Q22_No"
+
+  "23":  # Micro lab accredited?
+    type: ypn
+    yes:     "REPLACE__Q23_Yes"
+    partial: "REPLACE__Q23_Partial"
+    no:      "REPLACE__Q23_No"
+
+  "24":  # Micro lab quality control system?
+    type: ypn
+    yes:     "REPLACE__Q24_Yes"
+    partial: "REPLACE__Q24_Partial"
+    no:      "REPLACE__Q24_No"
+
+  "25":  # Electronic laboratory information system?
+    type: ypn
+    yes:     "REPLACE__Q25_Yes"
+    partial: "REPLACE__Q25_Partial"
+    no:      "REPLACE__Q25_No"
+
+  # ===========================================================================
+  # DOMAIN 3 — Education & Training (items 26–30, max 25)
+  # ===========================================================================
+
+  "26":  # Stewardship in induction/new-hire training?
+    type: ypn
+    yes:     "REPLACE__Q26_Yes"
+    partial: "REPLACE__Q26_Partial"
+    no:      "REPLACE__Q26_No"
+
+  "27":  # Continuous in-service training on stewardship AND IPC?
+    type: ypn
+    yes:     "REPLACE__Q27_Yes"
+    partial: "REPLACE__Q27_Partial"
+    no:      "REPLACE__Q27_No"
+
+  "28":  # Training for students/trainees?
+    type: ypn
+    yes:     "REPLACE__Q28_Yes"
+    partial: "REPLACE__Q28_Partial"
+    no:      "REPLACE__Q28_No"
+
+  "29":  # Training for the stewardship team (stewardship AND IPC)?
+    type: ypn
+    yes:     "REPLACE__Q29_Yes"
+    partial: "REPLACE__Q29_Partial"
+    no:      "REPLACE__Q29_No"
+
+  "30":  # Patient/family education about antibiotics?
+    type: ypn
+    yes:     "REPLACE__Q30_Yes"
+    partial: "REPLACE__Q30_Partial"
+    no:      "REPLACE__Q30_No"
+
+  # ===========================================================================
+  # DOMAIN 4 — Antibiotic Stewardship Actions (items 31–51, max 105)
+  # ===========================================================================
+
+  "31":  # Treatment guidelines that exist. Scoring: >=4 = 5; 1-3 = 2.5; none/NA = 0
+    type: multi
+    options:
+      uti:                  "REPLACE__Q31_UTI"
+      cap:                  "REPLACE__Q31_CAP"
+      hap:                  "REPLACE__Q31_HAP"
+      vap:                  "REPLACE__Q31_VAP"
+      sepsis:               "REPLACE__Q31_Sepsis"
+      ssti:                 "REPLACE__Q31_SSTI"
+      ssi:                  "REPLACE__Q31_SSI"
+      clabsi:               "REPLACE__Q31_CLABSI"
+      surgical_prophylaxis: "REPLACE__Q31_SurgProphylaxis"
+      intra_abdominal:      "REPLACE__Q31_IAI"
+      febrile_neutropenia:  "REPLACE__Q31_FebrileNeutropenia"
+      mdro:                 "REPLACE__Q31_MDRO"
+      meningitis:           "REPLACE__Q31_BacterialMeningitis"
+      endocarditis:         "REPLACE__Q31_InfectiveEndocarditis"
+      not_applicable:       "REPLACE__Q31_NotApplicable"
+      other:                "REPLACE__Q31_Other"
+
+  "32":  # Guideline contents. Scoring: first_line+dose+duration+alternatives
+         # ALL selected = 5; anything else = 2.5; none/NA = 0.
+         # DO NOT rename the first four keys — the required-set rule uses them.
+    type: multi
+    options:
+      first_line:     "REPLACE__Q32_FirstLineAgent"
+      dose:           "REPLACE__Q32_Dose"
+      duration:       "REPLACE__Q32_Duration"
+      alternatives:   "REPLACE__Q32_AlternativeAgents"
+      aware:          "REPLACE__Q32_AWaReClassification"
+      not_applicable: "REPLACE__Q32_NotApplicable"
+      other:          "REPLACE__Q32_Other"
+
+  "33":  # Guidelines reviewed/updated periodically & communicated?
+    type: ypn
+    yes:     "REPLACE__Q33_Yes"
+    partial: "REPLACE__Q33_Partial"
+    no:      "REPLACE__Q33_No"
+
+  "34":  # Antibiogram used to modify guidelines?
+    type: ypn
+    yes:     "REPLACE__Q34_Yes"
+    partial: "REPLACE__Q34_Partial"
+    no:      "REPLACE__Q34_No"
+
+  "35":  # 35A only. Scoring: >=9 "yes" = 5; 1-8 = 2.5; 0 = 0.
+         # List the 18 "Yes" checkboxes for activities A–R (35B not scored).
+    type: yescount
+    yes_fields:
+      - "REPLACE__Q35A_A_AutoStops_Yes"          # A. automatic stops
+      - "REPLACE__Q35A_B_TimeOuts_Yes"           # B. antibiotic time-outs
+      - "REPLACE__Q35A_C_Reminders_Yes"          # C. prescribing reminders
+      - "REPLACE__Q35A_D_IVtoPO_Yes"             # D. IV-to-oral conversion
+      - "REPLACE__Q35A_E_AuditFeedback_Yes"      # E. prospective audit & feedback
+      - "REPLACE__Q35A_F_PriorAuth_Yes"          # F. prior authorization
+      - "REPLACE__Q35A_G_RestrictedUse_Yes"      # G. restricted use / formulary
+      - "REPLACE__Q35A_H_PeerComparison_Yes"     # H. peer comparisons
+      - "REPLACE__Q35A_I_StewardshipRounds_Yes"  # I. in-person AS rounds
+      - "REPLACE__Q35A_J_AllergyReview_Yes"      # J. allergy assessment
+      - "REPLACE__Q35A_K_OPATReview_Yes"         # K. OPAT review pre-discharge
+      - "REPLACE__Q35A_L_DuplicateAlerts_Yes"    # L. duplicative coverage alerts
+      - "REPLACE__Q35A_M_DDIAlerts_Yes"          # M. drug-drug interaction alerts
+      - "REPLACE__Q35A_N_PKPDDosing_Yes"         # N. PK/PD dose optimization
+      - "REPLACE__Q35A_O_ShortageMgmt_Yes"       # O. shortage/stockout management
+      - "REPLACE__Q35A_P_RenalHepaticDosing_Yes" # P. pharmacist-assisted dosing
+      - "REPLACE__Q35A_Q_TDM_Yes"                # Q. therapeutic drug monitoring
+      - "REPLACE__Q35A_R_AwarenessCampaigns_Yes" # R. awareness campaigns
+
+  "36":  # SOPs for stewardship activities?
+    type: ypn
+    yes:     "REPLACE__Q36_Yes"
+    partial: "REPLACE__Q36_Partial"
+    no:      "REPLACE__Q36_No"
+
+  "37":  # Activity report contents. Scoring: >=2 = 5; 1 = 2.5; none/NA = 0
+    type: multi
+    options:
+      resources_activity:    "REPLACE__Q37_ResourcesActivity"
+      indicator_performance: "REPLACE__Q37_IndicatorPerformance"
+      appropriateness:       "REPLACE__Q37_Appropriateness"
+      resistance:            "REPLACE__Q37_Resistance"
+      key_improvements:      "REPLACE__Q37_KeyImprovements"
+      further_priorities:    "REPLACE__Q37_FurtherPriorities"
+      guidance_needed:       "REPLACE__Q37_GuidanceNeeded"
+      not_applicable:        "REPLACE__Q37_NotApplicable"
+      other:                 "REPLACE__Q37_Other"
+
+  "38":  # Report dissemination. Scoring: >=2 = 5; 1 = 2.5; none/NA = 0
+    type: multi
+    options:
+      management:           "REPLACE__Q38_FacilityManagement"
+      other_team_members:   "REPLACE__Q38_OtherTeamMembers"
+      national_authorities: "REPLACE__Q38_NationalAuthorities"
+      not_applicable:       "REPLACE__Q38_NotApplicable"
+      other:                "REPLACE__Q38_Other"
+
+  "39":  # Formulary based on national formulary?
+    type: ypn
+    yes:     "REPLACE__Q39_Yes"
+    partial: "REPLACE__Q39_Partial"
+    no:      "REPLACE__Q39_No"
+
+  "40":  # Restricted antibiotics requiring pre-authorization?
+    type: ypn
+    yes:     "REPLACE__Q40_Yes"
+    partial: "REPLACE__Q40_Partial"
+    no:      "REPLACE__Q40_No"
+
+  "41":  # Approvals available throughout the workday?
+    type: ypn
+    yes:     "REPLACE__Q41_Yes"
+    partial: "REPLACE__Q41_Partial"
+    no:      "REPLACE__Q41_No"
+
+  "42":  # Formulary modifications communicated to prescribers?
+    type: ypn
+    yes:     "REPLACE__Q42_Yes"
+    partial: "REPLACE__Q42_Partial"
+    no:      "REPLACE__Q42_No"
+
+  "43":  # Nurse stewardship activities. Scoring: >=2 = 5; 1 = 2.5; none/NA = 0
+    type: multi
+    options:
+      culture_collection: "REPLACE__Q43_CultureCriteria"
+      iv_to_oral:         "REPLACE__Q43_IVtoPO"
+      time_outs:          "REPLACE__Q43_TimeOuts"
+      allergy_assessment: "REPLACE__Q43_AllergyAssessment"
+      not_applicable:     "REPLACE__Q43_NotApplicable"
+      other:              "REPLACE__Q43_Other"
+
+  "44":  # Documentation policy (dose, duration, indication)?
+    type: ypn
+    yes:     "REPLACE__Q44_Yes"
+    partial: "REPLACE__Q44_Partial"
+    no:      "REPLACE__Q44_No"
+
+  "45":  # Rapid diagnostic testing?
+    type: ypn
+    yes:     "REPLACE__Q45_Yes"
+    partial: "REPLACE__Q45_Partial"
+    no:      "REPLACE__Q45_No"
+
+  "46":  # Resistance-mechanism detection (ESBL, carbapenemases)?
+    type: ypn
+    yes:     "REPLACE__Q46_Yes"
+    partial: "REPLACE__Q46_Partial"
+    no:      "REPLACE__Q46_No"
+
+  "47":  # Timely culture & susceptibility results (<=72h)?
+    type: ypn
+    yes:     "REPLACE__Q47_Yes"
+    partial: "REPLACE__Q47_Partial"
+    no:      "REPLACE__Q47_No"
+
+  "48":  # Selective/cascade susceptibility reporting?
+    type: ypn
+    yes:     "REPLACE__Q48_Yes"
+    partial: "REPLACE__Q48_Partial"
+    no:      "REPLACE__Q48_No"
+
+  "49":  # Interpretive comments in culture results?
+    type: ypn
+    yes:     "REPLACE__Q49_Yes"
+    partial: "REPLACE__Q49_Partial"
+    no:      "REPLACE__Q49_No"
+
+  "50":  # Emerging resistance communicated to prescribers?
+    type: ypn
+    yes:     "REPLACE__Q50_Yes"
+    partial: "REPLACE__Q50_Partial"
+    no:      "REPLACE__Q50_No"
+
+  "51":  # Barriers/challenges/opportunities analysis conducted?
+    type: ypn
+    yes:     "REPLACE__Q51_Yes"
+    partial: "REPLACE__Q51_Partial"
+    no:      "REPLACE__Q51_No"
+
+  # ===========================================================================
+  # DOMAIN 5 — Antibiotic Use Tracking, Monitoring, & Reporting (52–66, max 75)
+  # ===========================================================================
+
+  "52":  # Regular prescription audits / point prevalence surveys?
+    type: ypn
+    yes:     "REPLACE__Q52_Yes"
+    partial: "REPLACE__Q52_Partial"
+    no:      "REPLACE__Q52_No"
+
+  "53":  # Quantity/types of antibiotic use monitored & reported?
+    type: ypn
+    yes:     "REPLACE__Q53_Yes"
+    partial: "REPLACE__Q53_Partial"
+    no:      "REPLACE__Q53_No"
+
+  "54":  # Consumption metric. Scoring: >=1 selected = 5; none/NA = 0 (no 2.5)
+    type: multi
+    options:
+      days_of_therapy:     "REPLACE__Q54_DOT"
+      defined_daily_doses: "REPLACE__Q54_DDD"
+      not_applicable:      "REPLACE__Q54_NotApplicable"
+      other:               "REPLACE__Q54_Other"
+
+  "55":  # Action plans developed for identified problems?
+    type: ypn
+    yes:     "REPLACE__Q55_Yes"
+    partial: "REPLACE__Q55_Partial"
+    no:      "REPLACE__Q55_No"
+
+  "56":  # Compliance with >=1 stewardship activity monitored?
+    type: ypn
+    yes:     "REPLACE__Q56_Yes"
+    partial: "REPLACE__Q56_Partial"
+    no:      "REPLACE__Q56_No"
+
+  "57":  # Strategies to increase compliance implemented?
+    type: ypn
+    yes:     "REPLACE__Q57_Yes"
+    partial: "REPLACE__Q57_Partial"
+    no:      "REPLACE__Q57_No"
+
+  "58":  # Impact metrics monitored. Scoring: >=2 = 5; 1 = 2.5; none/NA = 0
+    type: multi
+    options:
+      use_consumption:     "REPLACE__Q58_UseConsumption"
+      appropriateness:     "REPLACE__Q58_Appropriateness"
+      time_to_appropriate: "REPLACE__Q58_TimeToAppropriateTherapy"
+      cost_savings:        "REPLACE__Q58_CostSavings"
+      mortality:           "REPLACE__Q58_InHospitalMortality"
+      length_of_stay:      "REPLACE__Q58_LengthOfStay"
+      cdi_rates:           "REPLACE__Q58_CDiffRates"
+      rehospitalization:   "REPLACE__Q58_Rehospitalization"
+      adverse_events:      "REPLACE__Q58_AdverseEvents"
+      near_misses:         "REPLACE__Q58_NearMisses"
+      antibiotic_costs:    "REPLACE__Q58_AntibioticCosts"
+      not_applicable:      "REPLACE__Q58_NotApplicable"
+      other:               "REPLACE__Q58_Other"
+
+  "59":  # Unit/ward-stratifiable data. Scoring: >=2 = 5; 1 = 2.5; none/NA = 0
+    type: multi
+    options:
+      consumption:    "REPLACE__Q59_Consumption"
+      use:            "REPLACE__Q59_Use"
+      resistance:     "REPLACE__Q59_Resistance"
+      cost:           "REPLACE__Q59_Cost"
+      administrative: "REPLACE__Q59_AdministrativeData"
+      not_applicable: "REPLACE__Q59_NotApplicable"
+      other:          "REPLACE__Q59_Other"
+
+  "60":  # Essential antibiotic shortages/stockouts monitored?
+    type: ypn
+    yes:     "REPLACE__Q60_Yes"
+    partial: "REPLACE__Q60_Partial"
+    no:      "REPLACE__Q60_No"
+
+  "61":  # Laboratory supply shortages/stockouts monitored?
+    type: ypn
+    yes:     "REPLACE__Q61_Yes"
+    partial: "REPLACE__Q61_Partial"
+    no:      "REPLACE__Q61_No"
+
+  "62":  # Mechanism to report substandard antibiotics/diagnostics?
+    type: ypn
+    yes:     "REPLACE__Q62_Yes"
+    partial: "REPLACE__Q62_Partial"
+    no:      "REPLACE__Q62_No"
+
+  "63":  # Susceptibility/resistance rates monitored & reported?
+    type: ypn
+    yes:     "REPLACE__Q63_Yes"
+    partial: "REPLACE__Q63_Partial"
+    no:      "REPLACE__Q63_No"
+
+  "64":  # Audit findings communicated to prescribers with action points?
+    type: ypn
+    yes:     "REPLACE__Q64_Yes"
+    partial: "REPLACE__Q64_Partial"
+    no:      "REPLACE__Q64_No"
+
+  "65":  # Impact metrics reported to leadership?
+    type: ypn
+    yes:     "REPLACE__Q65_Yes"
+    partial: "REPLACE__Q65_Partial"
+    no:      "REPLACE__Q65_No"
+
+  "66":  # Antibiogram developed, aggregated, regularly updated?
+    type: ypn
+    yes:     "REPLACE__Q66_Yes"
+    partial: "REPLACE__Q66_Partial"
+    no:      "REPLACE__Q66_No"

@@ -1,0 +1,101 @@
+# action_plan.yml — SME-editable. Add languages by adding keys (es, fr, pt).
+version: 1
+priority_order: [critical, high, medium, low]
+
+# Items scoring 0 use tier "gap_tier"; items scoring 2.5 use "partial_tier".
+defaults:
+  gap_tier: high
+  partial_tier: medium
+
+# Per-item overrides and recommendation text
+recommendations:
+  "1":
+    gap_tier: critical
+    en: "Obtain a formal written statement from facility leadership naming antibiotic stewardship as a priority; leadership commitment is the foundational CDC Core Element."
+    es: "Obtenga una declaración formal por escrito del liderazgo que identifique la optimización de antibióticos como prioridad institucional."
+  "2":
+    en: "Integrate stewardship activities and KPIs into the facility annual plan; propose 2–3 measurable indicators (e.g., guideline compliance, DOT/1000 patient-days)."
+  "3":
+    gap_tier: critical
+    en: "Establish (or integrate into an existing committee) a multidisciplinary stewardship committee with defined terms of reference."
+  "4":
+    en: "Broaden committee membership toward ≥8 disciplines (physicians, pharmacists, nursing, IPC, microbiology, IT, leadership)."
+  "5":
+    en: "Set a fixed committee meeting cadence of at least quarterly with minutes and action tracking."
+  "6":
+    gap_tier: critical
+    en: "Constitute a stewardship team that includes an ID-trained/experienced physician, a pharmacist, and a clinical microbiologist where available; define team-leader roles and protected time."
+  "7":
+    en: "Schedule regular stewardship team meetings with standing agenda (interventions, metrics, barriers)."
+  "8":
+    gap_tier: critical
+    en: "Secure delegated authority for the committee/team over antibiotic-use policies (formulary decisions, restrictions, order menus)."
+  "9":
+    en: "Formalize collaboration with at least two departments (IPC, microbiology, pharmacy, quality, surgery, HIV/TB)."
+  "10":
+    gap_tier: low
+    en: "Join an external stewardship network, collaborative, or data-sharing consortium."
+  "11":
+    en: "Ensure ID physician, pharmacist, and microbiologist input into formulary/procurement decisions."
+  "12":
+    en: "Adopt a standard evidence review (safety, efficacy, cost) before adding new antibiotics to the formulary."
+  "13":
+    gap_tier: critical
+    en: "Advocate with leadership for dedicated human and financial resources for stewardship, using these assessment results as evidence."
+  # --- Domain 2 (14–25): resources, microbiology capacity -------------------
+  "14": {en: "Address workforce gaps: ID-experienced physician, pharmacist, and microbiologist presence at the facility."}
+  "15": {en: "Allocate office/physical workspace for the stewardship team."}
+  "16": {en: "Provide basic equipment (computer, telephone, internet access) for stewardship work."}
+  "17": {en: "Implement or expand clinical decision support in the EHR (order review, pre-authorization workflows)."}
+  "18": {en: "Grant team access to ≥2 key data sources (EMR, dispensing records, administration records, antibiograms)."}
+  "19": {en: "Digitize ≥2 data streams (consumption, use, resistance, cost, administrative denominators)."}
+  "20": {en: "Arrange access to current peer-reviewed literature (e.g., HINARI/Research4Life where eligible)."}
+  "21": {en: "Establish reliable access to laboratory and imaging services supporting stewardship interventions."}
+  "22": {en: "Work toward 24-hour specimen receipt/processing, or interim protocols for after-hours specimen handling."}
+  "23": {en: "Pursue laboratory accreditation (e.g., SLIPTA/ISO 15189 pathway)."}
+  "24": {en: "Implement a laboratory quality-control system."}
+  "25": {en: "Adopt an electronic laboratory information system (LIS)."}
+  # --- Domain 3 (26–30): education -----------------------------------------
+  "26": {en: "Add stewardship content to new-hire induction training."}
+  "27": {en: "Offer continuous in-service training covering BOTH stewardship and IPC."}
+  "28": {en: "Extend stewardship training to rotating students/trainees."}
+  "29": {en: "Provide dedicated stewardship/IPC training for the stewardship team itself."}
+  "30": {gap_tier: low, en: "Develop patient/family education materials on appropriate antibiotic use."}
+  # --- Domain 4 (31–51): actions --------------------------------------------
+  "31": {gap_tier: critical, en: "Develop facility treatment guidelines for ≥4 priority syndromes (start with CAP, UTI, sepsis, surgical prophylaxis)."}
+  "32": {en: "Ensure guidelines specify first-line agent, dose, duration, and alternatives (allergy/pregnancy/oral options); consider AWaRe categorization."}
+  "33": {en: "Institute periodic guideline review with prescriber communication of changes."}
+  "34": {en: "Use the facility antibiogram to inform empiric therapy recommendations in guidelines."}
+  "35": {gap_tier: critical, en: "Expand routine stewardship interventions toward ≥9 of the 18 listed activities; highest-yield starters: prospective audit & feedback, IV-to-oral conversion, antibiotic time-outs, automatic stops for surgical prophylaxis."}
+  "36": {en: "Write SOPs for core stewardship activities (audit & feedback, guideline development, testing protocols)."}
+  "37": {en: "Produce a stewardship activity report covering ≥2 elements (resources/activity, indicator performance, appropriateness, resistance, improvement areas)."}
+  "38": {en: "Disseminate the activity report to ≥2 audiences including facility management."}
+  "39": {en: "Adopt a facility formulary aligned to the national formulary/EML."}
+  "40": {en: "Define a restricted-antibiotic list requiring pre-authorization (prioritize Watch/Reserve agents)."}
+  "41": {en: "Ensure restricted-antibiotic approvals are available throughout the workday without delaying urgent therapy."}
+  "42": {en: "Communicate formulary changes to prescribers through established channels."}
+  "43": {en: "Engage nursing in ≥2 stewardship activities (culture criteria, IV-to-oral prompts, time-outs, allergy assessment)."}
+  "44": {en: "Require documentation of antibiotic dose, duration, and indication in the medical record."}
+  "45": {en: "Adopt rapid diagnostics with linked workflows for early antibiotic adjustment."}
+  "46": {en: "Build laboratory capacity to detect key resistance mechanisms (ESBL, carbapenemases)."}
+  "47": {en: "Improve turnaround so culture & susceptibility results reach prescribers within 72 hours."}
+  "48": {en: "Implement selective/cascade susceptibility reporting."}
+  "49": {en: "Add interpretive comments to culture reports to guide prescribing."}
+  "50": {en: "Create a rapid communication pathway to alert prescribers to emerging resistance."}
+  "51": {en: "Conduct a structured barriers/facilitators analysis for stewardship implementation."}
+  # --- Domain 5 (52–66): tracking & reporting -------------------------------
+  "52": {gap_tier: critical, en: "Begin regular prescription audits or point prevalence surveys (WHO PPS methodology is a practical starting point)."}
+  "53": {en: "Regularly monitor and report antibiotic quantities used (purchased, prescribed, or dispensed)."}
+  "54": {en: "Adopt a standard consumption metric (DDD from pharmacy data is feasible without an EHR; DOT if patient-level data exist)."}
+  "55": {en: "Translate monitoring findings into documented action plans."}
+  "56": {en: "Monitor compliance with at least one prioritized stewardship activity."}
+  "57": {en: "Deploy compliance-improvement strategies (academic detailing, guideline launch presentations)."}
+  "58": {en: "Track ≥2 impact metrics (use/consumption, appropriateness, mortality, LOS, C. difficile, costs)."}
+  "59": {en: "Enable unit/ward-level stratification for ≥2 data streams to target interventions."}
+  "60": {en: "Establish routine monitoring of essential antibiotic shortages/stockouts."}
+  "61": {en: "Monitor laboratory supply stockouts (reagents, plates)."}
+  "62": {en: "Create a reporting mechanism for substandard/falsified antibiotics and diagnostics."}
+  "63": {en: "Regularly monitor and report susceptibility/resistance rates for key indicator bacteria."}
+  "64": {en: "Feed back audit findings to prescribers with specific action points."}
+  "65": {en: "Report stewardship impact metrics to facility leadership on a fixed schedule."}
+  "66": {en: "Develop and regularly update a cumulative facility antibiogram."}
